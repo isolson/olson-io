@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Wardrobe</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="wardrobe.css">
+</head>
+<body>
+
+  <!-- PASSWORD GATE -->
+  <div id="password-gate">
+    <main>
+      <h1>Wardrobe</h1>
+      <p class="tagline">This page is private.</p>
+      <form id="auth-form">
+        <input type="password" id="pw-input" placeholder="password" autocomplete="off" autofocus>
+        <button type="submit">enter</button>
+      </form>
+      <p id="auth-error" class="note" hidden>incorrect</p>
+    </main>
+  </div>
+
+  <!-- APP -->
+  <div id="app" hidden>
+
+    <!-- WEATHER BAR -->
+    <div id="weather-bar">
+      <span id="weather-icon"></span>
+      <span id="weather-temp"></span>
+      <span id="weather-range" class="muted"></span>
+      <span id="weather-feels" class="muted"></span>
+      <button id="btn-settings" class="btn-icon" style="margin-left:auto;">&#9881;</button>
+    </div>
+
+    <!-- TAB CONTENT -->
+    <div id="views">
+
+      <!-- INVENTORY -->
+      <div id="view-inventory" class="view active">
+        <div class="filter-row">
+          <div class="filter-chips" id="category-filters">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="footwear">Footwear</button>
+            <button class="chip" data-filter="pants">Pants</button>
+            <button class="chip" data-filter="shirts">Shirts</button>
+            <button class="chip" data-filter="outerwear">Outerwear</button>
+            <button class="chip" data-filter="accessories">Accessories</button>
+          </div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-chips" id="status-filters">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="owned">Owned</button>
+            <button class="chip" data-filter="to-buy">To Buy</button>
+            <button class="chip" data-filter="wishlist">Wishlist</button>
+          </div>
+        </div>
+        <div id="item-grid" class="item-grid"></div>
+      </div>
+
+      <!-- TODAY -->
+      <div id="view-today" class="view">
+        <div id="outfit-builder">
+          <div class="outfit-context">
+            <span id="day-label" class="day-label"></span>
+            <div class="filter-chips" id="context-filters">
+              <button class="chip" data-context="any">Any</button>
+              <button class="chip" data-context="rugged">Work</button>
+              <button class="chip" data-context="casual">Casual</button>
+              <button class="chip" data-context="smart-casual">Smart</button>
+            </div>
+            <div class="occasion-row">
+              <select id="occasion-select">
+                <option value="">No special occasion</option>
+                <option value="date-night">Date Night</option>
+                <option value="wedding">Wedding</option>
+                <option value="funeral">Funeral</option>
+                <option value="interview">Interview</option>
+                <option value="outdoor-event">Outdoor Event</option>
+              </select>
+            </div>
+          </div>
+          <div class="outfit-slots">
+            <div class="outfit-slot" data-slot="footwear">
+              <div class="slot-label">Footwear</div>
+              <div class="slot-item" data-slot="footwear"><span class="slot-placeholder">+ tap to select</span></div>
+            </div>
+            <div class="outfit-slot" data-slot="pants">
+              <div class="slot-label">Bottoms</div>
+              <div class="slot-item" data-slot="pants"><span class="slot-placeholder">+ tap to select</span></div>
+            </div>
+            <div class="outfit-slot" data-slot="shirts">
+              <div class="slot-label">Top</div>
+              <div class="slot-item" data-slot="shirts"><span class="slot-placeholder">+ tap to select</span></div>
+            </div>
+            <div class="outfit-slot" data-slot="outerwear" id="outerwear-slot">
+              <div class="slot-label">Outerwear</div>
+              <div class="slot-item" data-slot="outerwear"><span class="slot-placeholder">+ tap to select</span></div>
+            </div>
+          </div>
+          <div id="validation-bar" hidden>
+            <span id="color-count"></span>
+            <span id="compatibility-msg"></span>
+          </div>
+          <div class="outfit-actions">
+            <button id="btn-suggest" class="btn btn-secondary">Suggest</button>
+            <button id="btn-wear" class="btn btn-primary" disabled>Wear This</button>
+          </div>
+        </div>
+
+        <!-- Item drawer for slot selection -->
+        <div id="item-drawer" class="drawer" hidden>
+          <div class="drawer-header">
+            <span id="drawer-title">Select item</span>
+            <button id="drawer-close" class="btn-icon">&times;</button>
+          </div>
+          <div id="drawer-items" class="item-grid"></div>
+        </div>
+      </div>
+
+      <!-- OUTFITS -->
+      <div id="view-outfits" class="view">
+        <h2>Presets</h2>
+        <div id="preset-list"></div>
+        <h2>Recent</h2>
+        <div id="outfit-history"></div>
+      </div>
+
+      <!-- LAUNDRY -->
+      <div id="view-laundry" class="view">
+        <div class="laundry-header">
+          <h2>Laundry</h2>
+          <button id="btn-laundry" class="btn btn-secondary">Did Laundry</button>
+        </div>
+        <div class="laundry-section">
+          <h3 class="section-label dirty-label">Needs Wash</h3>
+          <div id="laundry-dirty"></div>
+        </div>
+        <div class="laundry-section">
+          <h3 class="section-label clean-label">Clean</h3>
+          <div id="laundry-clean"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAB: Add Item -->
+    <button id="btn-add-item" class="fab">+</button>
+
+    <!-- BOTTOM TAB BAR -->
+    <nav id="tab-bar">
+      <button class="tab active" data-view="inventory">
+        <span class="tab-icon">&#9783;</span>
+        <span class="tab-label">Inventory</span>
+      </button>
+      <button class="tab" data-view="today">
+        <span class="tab-icon">&#9728;</span>
+        <span class="tab-label">Today</span>
+      </button>
+      <button class="tab" data-view="outfits">
+        <span class="tab-icon">&#9733;</span>
+        <span class="tab-label">Outfits</span>
+      </button>
+      <button class="tab" data-view="laundry">
+        <span class="tab-icon">&#9885;</span>
+        <span class="tab-label">Laundry</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- DETAIL SHEET -->
+  <div id="detail-sheet" class="sheet" hidden>
+    <div class="sheet-backdrop"></div>
+    <div class="sheet-content">
+      <div class="sheet-header">
+        <h2 id="detail-name"></h2>
+        <button id="detail-close" class="btn-icon">&times;</button>
+      </div>
+      <div id="detail-body"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settings-modal" class="sheet" hidden>
+    <div class="sheet-backdrop"></div>
+    <div class="sheet-content">
+      <div class="sheet-header">
+        <h2>Settings</h2>
+        <button class="btn-icon" onclick="this.closest('.sheet').hidden=true">&times;</button>
+      </div>
+      <div class="settings-field">
+        <label class="detail-label">Anthropic API Key</label>
+        <input type="password" id="api-key-input" placeholder="sk-ant-..." class="text-input">
+      </div>
+      <button id="settings-save" class="btn btn-primary" style="margin-top:1rem;">Save</button>
+    </div>
+  </div>
+
+  <!-- IMPORT MODAL -->
+  <div id="import-modal" class="sheet" hidden>
+    <div class="sheet-backdrop"></div>
+    <div class="sheet-content">
+      <div class="sheet-header">
+        <h2>Add Item</h2>
+        <button class="btn-icon" onclick="this.closest('.sheet').hidden=true">&times;</button>
+      </div>
+      <textarea id="import-input" rows="4" placeholder="Paste a product URL or description..." class="text-input" style="resize:vertical;"></textarea>
+      <button id="import-submit" class="btn btn-primary" style="margin-top:0.75rem;">Import via AI</button>
+      <p id="import-error" class="note" style="color:var(--danger);margin-top:0.5rem;" hidden></p>
+      <div id="import-review" hidden>
+        <h3 style="font-size:0.8125rem;color:var(--bright);margin:1rem 0 0.5rem;">Review</h3>
+        <div id="import-review-body"></div>
+        <button id="import-confirm" class="btn btn-primary" style="margin-top:0.75rem;">Add to Wardrobe</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="wardrobe-data.js"></script>
+  <script src="wardrobe-app.js"></script>
+</body>
+</html>
